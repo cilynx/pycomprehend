@@ -7,6 +7,7 @@ from .block import Block
 from .paragraph import Paragraph
 from .line import Line
 from .word import Word
+from .date import Date
 
 PAGE = 1
 BLOCK = 2
@@ -20,6 +21,7 @@ class Document:
         self.filename = filename
         self.pages = []
         self.raw_text = ''
+        self.dates = []
         for image in pdf2image.convert_from_path(filename):
             self.raw_text += pytesseract.image_to_string(image)
             data = pytesseract.image_to_data(image, output_type=Output.DICT)
@@ -62,13 +64,22 @@ class Document:
                                 data['text'][i])
                     paragraph.lines.append(line)
                 elif level == WORD:
-                    word = Word(data['left'][i],
+                    word = Word(line,
+                                data['left'][i],
                                 data['top'][i],
                                 data['width'][i],
                                 data['height'][i],
                                 data['conf'][i],
                                 data['text'][i])
                     line.words.append(word)
+                    if word.is_date:
+                        word.date = Date([word])
+                        self.dates.append(word.date)
+                    if word.is_year:
+                        word.date = Date([word.prev.prev, word.prev, word])
+                        word.prev.date = word.date
+                        word.prev.prev.date = word.date
+                        self.dates.append(word.date)
                 else:
                     raise Exception(f'Unknown level.  Did Tesseract change their TSV spec?: {level}')
                 i += 1
