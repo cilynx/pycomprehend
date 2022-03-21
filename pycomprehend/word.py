@@ -2,7 +2,7 @@ import json
 
 class Word:
     def __init__(self, left, top, width, height, conf, text):
-        print(f'     Word.__init__{left, top, width, height, conf, text}')
+        # print(f'     Word.__init__{left, top, width, height, conf, text}')
         self.left = left
         self.top = top
         self.width = width
@@ -10,9 +10,4 @@ class Word:
         self.conf = conf
         self.text = text
 
-    def __repr__(self):
-        return self.json
-
     @property
-    def json(self):
-        return json.dumps(self.__dict__)

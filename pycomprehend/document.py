@@ -16,7 +16,7 @@ WORD = 5
 
 class Document:
     def __init__(self, filename):
-        print(f'Document.__init__({filename})')
+        # print(f'Document.__init__({filename})')
         self.filename = filename
         self.pages = []
         self.raw_text = ''
