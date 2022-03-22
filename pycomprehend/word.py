@@ -41,6 +41,12 @@ class Word:
             return self.line.words[index-1]
 
     @property
+    def next(self):
+        index = self.line.words.index(self)
+        if index+1 < len(self.line.words):
+            return self.line.words[index+1]
+
+    @property
     def x_space_between(self, word):
         return max([self.left, word.left]) - min([self.right, word.right])
 

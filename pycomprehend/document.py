@@ -7,7 +7,7 @@ from .block import Block
 from .paragraph import Paragraph
 from .line import Line
 from .word import Word
-from .date import Date
+from .date import Date, DateRange
 
 PAGE = 1
 BLOCK = 2
@@ -23,6 +23,7 @@ class Document:
         self.raw_text = ''
         self.pages = []
         self.dates = []
+        self.date_ranges = []
         for image in pdf2image.convert_from_path(filename):
             self.raw_text += pytesseract.image_to_string(image)
             data = pytesseract.image_to_data(image, output_type=Output.DICT)
@@ -78,8 +79,7 @@ class Document:
                     raise Exception(f'Unknown level.  Did Tesseract change their TSV spec?: {level}')
                 i += 1
         self.__extract_dates()
-        self.__extract_contigs()
-        self.__extract_tables()
+        self.__extract_date_ranges()
 
     ###########################################################################
     # Properties
@@ -113,8 +113,12 @@ class Document:
             if word.is_year:
                 self.dates.append(Date([word.prev.prev, word.prev, word]))
 
-    def __extract_contigs(self):
-        print("\nExtracting Contigs...")
-
-    def __extract_tables(self):
-        print("\nExtracting Tables...")
+    def __extract_date_ranges(self):
+        print("\nExtracting Date Ranges...")
+        for start in self.dates:
+            if not start.range:
+                divider = start.last_word.next
+                if divider and divider.text in ['-', 'to', 'through', 'until']:
+                    end = divider.next
+                    if end and end.date:
+                        self.date_ranges.append(DateRange(start, end))
