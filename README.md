@@ -1,2 +1,2 @@
-# pantomath
-Pantomath knows things.
+# pycomprehend
+pycomprehend knows things.
