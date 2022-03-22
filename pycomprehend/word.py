@@ -12,6 +12,7 @@ class Word:
         self.conf = conf
         self.text = text
         self.type = None
+        self.date = None
 
     ###########################################################################
     # Properties
@@ -91,8 +92,8 @@ class Word:
                 # Month?
                 ppw = pw.prev
                 if ppw and re.search(months, ppw.text, re.IGNORECASE):
-                    self.type == 'year'
-                    ppw.type == 'month'
-                    pw.type == 'day'
+                    self.type = 'year'
+                    ppw.type = 'month'
+                    pw.type = 'day'
                     return True
         return False

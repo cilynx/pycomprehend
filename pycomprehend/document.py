@@ -78,6 +78,7 @@ class Document:
                     raise Exception(f'Unknown level.  Did Tesseract change their TSV spec?: {level}')
                 i += 1
         self.__extract_dates()
+        self.__extract_contigs()
         self.__extract_tables()
 
     ###########################################################################
@@ -108,13 +109,12 @@ class Document:
         print("\nExtracting Dates...")
         for word in self.words:
             if word.is_date:
-                word.date = Date([word])
-                self.dates.append(word.date)
+                self.dates.append(Date([word]))
             if word.is_year:
-                word.date = Date([word.prev.prev, word.prev, word])
-                word.prev.date = word.date
-                word.prev.prev.date = word.date
-                self.dates.append(word.date)
+                self.dates.append(Date([word.prev.prev, word.prev, word]))
+
+    def __extract_contigs(self):
+        print("\nExtracting Contigs...")
 
     def __extract_tables(self):
         print("\nExtracting Tables...")

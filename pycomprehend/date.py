@@ -6,6 +6,8 @@ class Date:
         self.words = words
         self.string = ' '.join([word.text for word in self.words])
         self.dt = parse(self.string)
+        for word in self.words:
+            word.date = self
 
     ###########################################################################
     # Properties
