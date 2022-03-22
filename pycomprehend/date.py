@@ -1,5 +1,6 @@
 from dateutil.parser import parse
 
+
 class Date:
     def __init__(self, words):
         self.words = words
