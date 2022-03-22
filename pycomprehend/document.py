@@ -56,7 +56,8 @@ class Document:
                                           data['text'][i])
                     block.paragraphs.append(paragraph)
                 elif level == LINE:
-                    line = Line(data['left'][i],
+                    line = Line(paragraph,
+                                data['left'][i],
                                 data['top'][i],
                                 data['width'][i],
                                 data['height'][i],

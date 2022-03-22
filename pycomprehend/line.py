@@ -1,5 +1,5 @@
 class Line:
-    def __init__(self, left, top, width, height, conf, text):
+    def __init__(self, paragraph, left, top, width, height, conf, text):
         # print(f'    Line.__init__{left, top, width, height, conf, text}')
         self.left = left
         self.top = top
@@ -19,6 +19,11 @@ class Line:
     def text(self):
         return ' '.join([word.text for word in self.words])
 
+    @property
+    def prev(self):
+        index = self.paragraph.lines.index(self)
+        if index:
+            return self.paragraph.lines[index-1]
 
     ###########################################################################
     # Public Methods
