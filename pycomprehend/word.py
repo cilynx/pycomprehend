@@ -21,14 +21,42 @@ class Word:
         return self.left + self.width
 
     @property
+    def center(self):
+        return (self.right - self.left)/2
+
+    @property
     def bottom(self):
         return self.top - self.height
+
+    @property
+    def middle(self):
+        return (self.top - self.bottom)/2
 
     @property
     def prev(self):
         index = self.line.words.index(self)
         if index:
             return self.line.words[index-1]
+
+    @property
+    def x_space_between(self, word):
+        return max([self.left, word.left]) - min([self.right, word.right])
+
+    @property
+    def y_space_between(self, word):
+        return max([self.bottom, word.bottom]) - min([self.top, word.top])
+
+    @property
+    def left_aligned(self, word):
+        return abs(word.left - self.left) < max([self.height, word.height])/4
+
+    @property
+    def right_aligned(self, word):
+        return abs(word.right - self.right) < max([self.height, word.height])/4
+
+    @property
+    def center_aligned(self, word):
+        return abs(word.center - self.center) < max([self.height, word.height])/4
 
     @property
     def is_date(self):
