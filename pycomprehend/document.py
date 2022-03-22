@@ -17,10 +17,10 @@ WORD = 5
 
 class Document:
     def __init__(self, filename):
-        # print(f'Document.__init__({filename})')
+        print(f'Document.__init__({filename})')
         self.filename = filename
-        self.pages = []
         self.raw_text = ''
+        self.pages = []
         self.dates = []
         for image in pdf2image.convert_from_path(filename):
             self.raw_text += pytesseract.image_to_string(image)
@@ -71,7 +71,7 @@ class Document:
                                 data['height'][i],
                                 data['conf'][i],
                                 data['text'][i])
-                    line.words.append(word)
+                    line.append(word)
                     if word.is_date:
                         word.date = Date([word])
                         self.dates.append(word.date)

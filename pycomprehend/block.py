@@ -10,7 +10,7 @@ class Block:
         self.paragraphs = []
 
     def __repr__(self):
-        return '\n'.join([str(paragraph) for paragraph in self.paragraphs])
+        return ' '.join([str(paragraph) for paragraph in self.paragraphs])
 
     @property
     def lines(self):

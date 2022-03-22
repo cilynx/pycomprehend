@@ -1,6 +1,6 @@
 class Page:
     def __init__(self, left, top, width, height, conf, text):
-        # print(f' Page.__init__{left, top, width, height, conf, text}')
+        print(f' Page.__init__{left, top, width, height, conf, text}')
         self.left = left
         self.top = top
         self.width = width
@@ -10,7 +10,7 @@ class Page:
         self.blocks = []
 
     def __repr__(self):
-        return '\n\n'.join([str(block) for block in self.blocks])
+        return ' '.join([str(block) for block in self.blocks])
 
     @property
     def paragraphs(self):

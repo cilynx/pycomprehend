@@ -6,11 +6,13 @@ class Paragraph:
         self.width = width
         self.height = height
         self.conf = conf
-        self.text = text
+        if text:
+            raise Exception(f'Paragraph should never be passed text directly: {text}')
         self.lines = []
 
-    def __repr__(self):
-        return ' '.join([str(line) for line in self.lines])
+    @property
+    def text(self):
+        return ' '.join([line.text for line in self.lines])
 
     @property
     def words(self):

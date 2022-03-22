@@ -6,8 +6,15 @@ class Line:
         self.width = width
         self.height = height
         self.conf = conf
-        self.text = text
         self.words = []
+        self.breaks = []
+        if text:
+            raise Exception(f'Line should never be passed text directly: {text}')
 
-    def __repr__(self):
-        return ' '.join([str(word) for word in self.words])
+    @property
+    def text(self):
+        return ' '.join([word.text for word in self.words])
+
+    def append(self, word):
+        self.words.append(word)
+        self.breaks.extend([word.left, word.right])
