@@ -73,17 +73,11 @@ class Document:
                                 data['conf'][i],
                                 data['text'][i])
                     line.append(word)
-                    if word.is_date:
-                        word.date = Date([word])
-                        self.dates.append(word.date)
-                    if word.is_year:
-                        word.date = Date([word.prev.prev, word.prev, word])
-                        word.prev.date = word.date
-                        word.prev.prev.date = word.date
-                        self.dates.append(word.date)
                 else:
                     raise Exception(f'Unknown level.  Did Tesseract change their TSV spec?: {level}')
                 i += 1
+        self.__extract_dates()
+        self.__extract_tables()
 
     ###########################################################################
     # Properties
@@ -108,3 +102,19 @@ class Document:
     ###########################################################################
     # Private Methods
     ###########################################################################
+
+    def __extract_dates(self):
+        print("\nExtracting Dates...")
+        for word in self.words:
+            if word.is_date:
+                word.date = Date([word])
+                self.dates.append(word.date)
+            if word.is_year:
+                word.date = Date([word.prev.prev, word.prev, word])
+                word.prev.date = word.date
+                word.prev.prev.date = word.date
+                self.dates.append(word.date)
+
+    def __extract_tables(self):
+        print("\nExtracting Tables...")
+        
