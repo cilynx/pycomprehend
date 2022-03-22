@@ -1,13 +1,12 @@
-class Paragraph:
-    def __init__(self, left, top, width, height, conf, text):
-        # print(f'   Paragraph.__init__{left, top, width, height, conf, text}')
-        self.left = left
-        self.top = top
-        self.width = width
-        self.height = height
-        self.conf = conf
+from .placeable import Placeable
+
+
+class Paragraph(Placeable):
+    def __init__(self, block, left, top, width, height, conf, text):
+        super().__init__(left, top, width, height, conf)
         if text:
             raise Exception(f'Paragraph should never be passed text directly: {text}')
+        self.block = block
         self.lines = []
 
     ###########################################################################

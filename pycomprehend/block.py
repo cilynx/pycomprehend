@@ -1,12 +1,12 @@
-class Block:
-    def __init__(self, left, top, width, height, conf, text):
-        # print(f'  Block.__init__{left, top, width, height, conf, text}')
-        self.left = left
-        self.top = top
-        self.width = width
-        self.height = height
-        self.conf = conf
-        self.text = text
+from .placeable import Placeable
+
+
+class Block(Placeable):
+    def __init__(self, page, left, top, width, height, conf, text):
+        super().__init__(left, top, width, height, conf)
+        if text:
+            raise Exception(f'Block should never be passed text directly: {text}')
+        self.page = page
         self.paragraphs = []
 
     ###########################################################################

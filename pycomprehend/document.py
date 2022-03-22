@@ -34,7 +34,8 @@ class Document:
             i = 0
             for level in data['level']:
                 if level == PAGE:
-                    page = Page(data['left'][i],
+                    page = Page(self,
+                                data['left'][i],
                                 data['top'][i],
                                 data['width'][i],
                                 data['height'][i],
@@ -42,7 +43,8 @@ class Document:
                                 data['text'][i])
                     self.pages.append(page)
                 elif level == BLOCK:
-                    block = Block(data['left'][i],
+                    block = Block(page,
+                                  data['left'][i],
                                   data['top'][i],
                                   data['width'][i],
                                   data['height'][i],
@@ -50,7 +52,8 @@ class Document:
                                   data['text'][i])
                     page.blocks.append(block)
                 elif level == PARAGRAPH:
-                    paragraph = Paragraph(data['left'][i],
+                    paragraph = Paragraph(block,
+                                          data['left'][i],
                                           data['top'][i],
                                           data['width'][i],
                                           data['height'][i],

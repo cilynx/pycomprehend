@@ -1,15 +1,14 @@
-class Line:
+from .placeable import Placeable
+
+
+class Line(Placeable):
     def __init__(self, paragraph, left, top, width, height, conf, text):
-        # print(f'    Line.__init__{left, top, width, height, conf, text}')
-        self.left = left
-        self.top = top
-        self.width = width
-        self.height = height
-        self.conf = conf
-        self.words = []
-        self.breaks = []
+        super().__init__(left, top, width, height, conf)
         if text:
             raise Exception(f'Line should never be passed text directly: {text}')
+        self.paragraph = paragraph
+        self.words = []
+        self.breaks = []
 
     ###########################################################################
     # Properties
