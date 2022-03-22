@@ -8,6 +8,7 @@ from .paragraph import Paragraph
 from .line import Line
 from .word import Word
 from .date import Date, DateRange
+from .contig import Contig
 
 PAGE = 1
 BLOCK = 2
@@ -24,6 +25,7 @@ class Document:
         self.pages = []
         self.dates = []
         self.date_ranges = []
+        self.contigs = []
         for image in pdf2image.convert_from_path(filename):
             self.raw_text += pytesseract.image_to_string(image)
             data = pytesseract.image_to_data(image, output_type=Output.DICT)
@@ -83,6 +85,7 @@ class Document:
                 i += 1
         self.__extract_dates()
         self.__extract_date_ranges()
+        self.__extract_contigs()
 
     ###########################################################################
     # Properties
@@ -125,3 +128,22 @@ class Document:
                     end = divider.next
                     if end and end.date:
                         self.date_ranges.append(DateRange(start, end))
+
+    def __extract_contigs(self):
+        print("\nExtracting Contigs...")
+        prev_word = None
+        for word in self.words:
+            if prev_word:
+                if word.next_to(prev_word):
+                    # print(f'Next to: {word.text}')
+                    prev_word.contig.append(word)
+                elif word.left_aligned(prev_word.contig) and word.just_below(prev_word.contig):
+                    # print(f'Carriage return: {word.text}')
+                    prev_word.contig.append(word)
+                else:
+                    # print(f'New contig: {word.text}')
+                    self.contigs.append(Contig([word]))
+            else:
+                # print(f'First contig: {word.text}')
+                self.contigs.append(Contig([word]))
+            prev_word = word

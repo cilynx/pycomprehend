@@ -1,11 +1,10 @@
 class Placeable:
-    def __init__(self, left, top, width, height, conf):
-        # print(f'{type(self)}.__init__{left, top, width, height, conf}')
+    def __init__(self, left, top, width, height):
+        # print(f'{type(self)}.__init__{left, top, width, height}')
         self.left = left
         self.top = top
         self.width = width
         self.height = height
-        self.conf = conf
 
     ###########################################################################
     # Properties
@@ -25,24 +24,32 @@ class Placeable:
 
     @property
     def middle(self):
-        return (self.top - self.bottom)/2
+        return (self.top + self.bottom)/2
 
-    @property
+    ###########################################################################
+    # Public Methods
+    ###########################################################################
+
     def x_space_between(self, placeable):
         return max([self.left, placeable.left]) - min([self.right, placeable.right])
 
-    @property
     def y_space_between(self, placeable):
         return max([self.bottom, placeable.bottom]) - min([self.top, placeable.top])
 
-    @property
-    def left_aligned(self, placeable):
-        return abs(placeable.left - self.left) < max([self.height, placeable.height])/4
+    def next_to(self, placeable):
+        print(self.middle, placeable.middle, max([self.height, placeable.height]))
+        if self.line != placeable.line:
+            return False
+        return self.x_space_between(placeable) < max([self.height, placeable.height])
 
-    @property
+    def left_aligned(self, placeable):
+        return abs(placeable.left - self.left) < max([self.height, placeable.height])/20
+
     def right_aligned(self, placeable):
         return abs(placeable.right - self.right) < max([self.height, placeable.height])/4
 
-    @property
     def center_aligned(self, placeable):
         return abs(placeable.center - self.center) < max([self.height, placeable.height])/4
+
+    def just_below(self, placeable):
+        return self.bottom - placeable.top < max([self.height, placeable.height])/2

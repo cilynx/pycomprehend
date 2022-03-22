@@ -5,8 +5,9 @@ from .placeable import Placeable
 
 class Word(Placeable):
     def __init__(self, line, left, top, width, height, conf, text):
-        super().__init__(left, top, width, height, conf)
+        super().__init__(left, top, width, height)
         self.line = line
+        self.conf = conf
         self.text = text
         self.type = None
         self.date = None

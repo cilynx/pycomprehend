@@ -3,7 +3,7 @@ from .placeable import Placeable
 
 class Page(Placeable):
     def __init__(self, document, left, top, width, height, conf, text):
-        super().__init__(left, top, width, height, conf)
+        super().__init__(left, top, width, height)
         if text:
             raise Exception(f'Page should never be passed text directly: {text}')
         self.document = document
