@@ -1,5 +1,6 @@
 import re
 
+
 class Word:
     def __init__(self, line, left, top, width, height, conf, text):
         # print(f'     Word.__init__{left, top, width, height, conf, text}')

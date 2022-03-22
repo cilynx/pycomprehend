@@ -15,6 +15,7 @@ PARAGRAPH = 3
 LINE = 4
 WORD = 5
 
+
 class Document:
     def __init__(self, filename):
         print(f'Document.__init__({filename})')
@@ -117,4 +118,3 @@ class Document:
 
     def __extract_tables(self):
         print("\nExtracting Tables...")
-        
