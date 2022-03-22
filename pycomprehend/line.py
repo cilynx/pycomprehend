@@ -11,9 +11,18 @@ class Line:
         if text:
             raise Exception(f'Line should never be passed text directly: {text}')
 
+    ###########################################################################
+    # Properties
+    ###########################################################################
+
     @property
     def text(self):
         return ' '.join([word.text for word in self.words])
+
+
+    ###########################################################################
+    # Public Methods
+    ###########################################################################
 
     def append(self, word):
         self.words.append(word)

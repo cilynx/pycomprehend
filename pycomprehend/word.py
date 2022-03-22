@@ -12,6 +12,10 @@ class Word:
         self.text = text
         self.type = None
 
+    ###########################################################################
+    # Properties
+    ###########################################################################
+
     @property
     def right(self):
         return self.left + self.width

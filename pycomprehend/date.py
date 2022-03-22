@@ -6,6 +6,10 @@ class Date:
         self.string = ' '.join([word.text for word in self.words])
         self.dt = parse(self.string)
 
+    ###########################################################################
+    # Properties
+    ###########################################################################
+
     @property
     def left(self):
         return min([word.left for word in self.words])

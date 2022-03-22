@@ -9,8 +9,9 @@ class Page:
         self.text = text
         self.blocks = []
 
-    def __repr__(self):
-        return ' '.join([str(block) for block in self.blocks])
+    ###########################################################################
+    # Properties
+    ###########################################################################
 
     @property
     def paragraphs(self):

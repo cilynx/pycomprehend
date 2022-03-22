@@ -9,8 +9,9 @@ class Block:
         self.text = text
         self.paragraphs = []
 
-    def __repr__(self):
-        return ' '.join([str(paragraph) for paragraph in self.paragraphs])
+    ###########################################################################
+    # Properties
+    ###########################################################################
 
     @property
     def lines(self):

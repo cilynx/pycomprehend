@@ -10,6 +10,10 @@ class Paragraph:
             raise Exception(f'Paragraph should never be passed text directly: {text}')
         self.lines = []
 
+    ###########################################################################
+    # Properties
+    ###########################################################################
+
     @property
     def text(self):
         return ' '.join([line.text for line in self.lines])

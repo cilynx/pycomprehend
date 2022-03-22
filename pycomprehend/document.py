@@ -84,6 +84,10 @@ class Document:
                     raise Exception(f'Unknown level.  Did Tesseract change their TSV spec?: {level}')
                 i += 1
 
+    ###########################################################################
+    # Properties
+    ###########################################################################
+
     @property
     def blocks(self):
         return [block for page in self.pages for block in page.blocks]
@@ -99,3 +103,7 @@ class Document:
     @property
     def words(self):
         return [word for line in self.lines for word in line.words]
+
+    ###########################################################################
+    # Private Methods
+    ###########################################################################
