@@ -131,19 +131,16 @@ class Document:
 
     def __extract_contigs(self):
         print("\nExtracting Contigs...")
-        prev_word = None
         for word in self.words:
-            if prev_word:
-                if word.next_to(prev_word):
-                    # print(f'Next to: {word.text}')
-                    prev_word.contig.append(word)
-                elif word.left_aligned(prev_word.contig) and word.just_below(prev_word.contig):
-                    # print(f'Carriage return: {word.text}')
-                    prev_word.contig.append(word)
-                else:
-                    # print(f'New contig: {word.text}')
-                    self.contigs.append(Contig([word]))
+            for contig in self.contigs:
+                if word.next_to(contig.last_word):
+                    # Next to the last word of a known contig
+                    contig.append(word)
+                    break
+                elif word.left_aligned(contig) and word.just_below(contig):
+                    # CR-LF below a known contig
+                    contig.append(word)
+                    break
             else:
-                # print(f'First contig: {word.text}')
+                # Not aligned with anything we know about.  Start new contig.
                 self.contigs.append(Contig([word]))
-            prev_word = word
