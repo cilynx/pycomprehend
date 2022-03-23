@@ -10,18 +10,6 @@ class Date(BagOfWords):
         for word in self.words:
             word.date = self
 
-    ###########################################################################
-    # Properties
-    ###########################################################################
-
-    @property
-    def first_word(self):
-        return self.words[0]
-
-    @property
-    def last_word(self):
-        return self.words[-1]
-
 
 class DateRange(BagOfWords):
     def __init__(self, start, end):

@@ -28,3 +28,11 @@ class BagOfWords(Placeable):
     @property
     def text(self):
         return ' '.join([word.text for word in self.words])
+
+    @property
+    def last_word(self):
+        return self.words[-1]
+
+    @property
+    def first_word(self):
+        return self.words[0]
