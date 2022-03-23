@@ -37,7 +37,6 @@ class Placeable:
         return max([self.bottom, placeable.bottom]) - min([self.top, placeable.top])
 
     def next_to(self, placeable):
-        print(self.middle, placeable.middle, max([self.height, placeable.height]))
         if self.line != placeable.line:
             return False
         return self.x_space_between(placeable) < max([self.height, placeable.height])
