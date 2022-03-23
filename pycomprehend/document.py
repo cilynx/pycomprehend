@@ -72,14 +72,15 @@ class Document:
                                 data['text'][i])
                     paragraph.lines.append(line)
                 elif level == WORD:
-                    word = Word(line,
-                                data['left'][i],
-                                data['top'][i],
-                                data['width'][i],
-                                data['height'][i],
-                                data['conf'][i],
-                                data['text'][i])
-                    line.append(word)
+                    if data['text'][i] and not data['text'][i].isspace():
+                        word = Word(line,
+                                    data['left'][i],
+                                    data['top'][i],
+                                    data['width'][i],
+                                    data['height'][i],
+                                    data['conf'][i],
+                                    data['text'][i])
+                        line.append(word)
                 else:
                     raise Exception(f'Unknown level.  Did Tesseract change their TSV spec?: {level}')
                 i += 1
@@ -132,15 +133,15 @@ class Document:
     def __extract_contigs(self):
         print("\nExtracting Contigs...")
         for word in self.words:
-            for contig in self.contigs:
-                if word.next_to(contig.last_word):
-                    # Next to the last word of a known contig
-                    contig.append(word)
-                    break
-                elif word.left_aligned(contig) and word.just_below(contig):
-                    # CR-LF below a known contig
-                    contig.append(word)
-                    break
+            if word.prev and word.continues(word.prev.contig):
+                word.prev.contig.append(word)
             else:
-                # Not aligned with anything we know about.  Start new contig.
-                self.contigs.append(Contig([word]))
+                for contig in self.contigs:
+                    if word.continues(contig):
+                        # Word flows after a known contig
+                        contig.append(word)
+                        break
+                else:
+                    # Not aligned with anything we know about.  Start new contig.
+                    print('-\n', word.text)
+                    self.contigs.append(Contig([word]))

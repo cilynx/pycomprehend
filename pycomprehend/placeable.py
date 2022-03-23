@@ -20,7 +20,7 @@ class Placeable:
 
     @property
     def bottom(self):
-        return self.top - self.height
+        return self.top + self.height
 
     @property
     def middle(self):
@@ -31,24 +31,53 @@ class Placeable:
     ###########################################################################
 
     def x_space_between(self, placeable):
+        # Rightmost Left - Leftmost Right
         return max([self.left, placeable.left]) - min([self.right, placeable.right])
 
     def y_space_between(self, placeable):
-        return max([self.bottom, placeable.bottom]) - min([self.top, placeable.top])
+        # Highest Bottom - Lowest Top
+        return min([self.bottom, placeable.bottom]) - max([self.top, placeable.top])
 
     def next_to(self, placeable):
+        # TODO: Not sure I like the Line requirement here.
+        #       Spatial v-align might be a more versatile test.
+        if self.text == 'access' and placeable.text == 'network':
+            print(f'|{self.x_space_between(placeable)}|{self.height}|{placeable.height}|')
         if self.line != placeable.line:
             return False
-        return self.x_space_between(placeable) < max([self.height, placeable.height])
+        return self.x_space_between(placeable) < 2 * self.height
 
     def left_aligned(self, placeable):
-        return abs(placeable.left - self.left) < max([self.height, placeable.height])/20
+        # Left edges are within one average letter space of each other
+        return abs(placeable.left - self.left) < self.width / len(self.text)
 
     def right_aligned(self, placeable):
-        return abs(placeable.right - self.right) < max([self.height, placeable.height])/4
+        # Left edges are within one average letter space of each other
+        return abs(placeable.right - self.right) < self.width / len(self.text)
 
     def center_aligned(self, placeable):
-        return abs(placeable.center - self.center) < max([self.height, placeable.height])/4
+        # H-Centers are within one average letter space of each other
+        return abs(placeable.center - self.center) < self.width / len(self.text)
+
+    def aligned_with(self, placeable):
+        # Self is H-Aligned with Placeable in any possible way
+        if self.left_aligned(placeable):
+            print("left_aligned")
+            return 'left'
+        if self.right_aligned(placeable):
+            print("right_aligned")
+            return 'right'
+        if self.center_aligned(placeable):
+            print("center_aligned")
+            return 'center'
+        return False
 
     def just_below(self, placeable):
-        return self.bottom - placeable.top < max([self.height, placeable.height])/2
+        if self.page == placeable.page:
+            # Self's top is within Self's height of Placeable's bottom
+            return 0 < self.top - placeable.bottom < self.height
+        # elif self.page.num == placeable.page.num + 1:
+        #     # TODO: Support flowing onto the next page
+        #     return False
+        else:
+            return False

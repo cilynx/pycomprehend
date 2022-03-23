@@ -17,6 +17,18 @@ class Word(Placeable):
     ###########################################################################
 
     @property
+    def paragraph(self):
+        return self.line.paragraph
+
+    @property
+    def block(self):
+        return self.paragraph.block
+
+    @property
+    def page(self):
+        return self.block.page
+
+    @property
     def prev(self):
         index = self.line.words.index(self)
         if index:
@@ -64,4 +76,20 @@ class Word(Placeable):
                     ppw.type = 'month'
                     pw.type = 'day'
                     return True
+        return False
+
+    ###########################################################################
+    # Public Methods
+    ###########################################################################
+
+    def continues(self, contig):
+        if self.next_to(contig.last_word):
+            print(f'{self.text} is next_to {contig.last_word.text}')
+            return True
+        if self.text == 'Please':
+            print(f'|just_below: {self.just_below(contig)}|aligend_with: {self.aligned_with(contig)}|{contig.text}')
+        if self.just_below(contig) and self.aligned_with(contig):
+            print(f'{self.text} is just_below and aligned_with {contig.last_word.text}')
+            self.text = f'\n{self.text}'
+            return True
         return False
