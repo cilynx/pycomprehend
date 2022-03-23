@@ -2,7 +2,7 @@ from .placeable import Placeable
 
 
 class Line(Placeable):
-    def __init__(self, paragraph, left, top, width, height, conf, text):
+    def __init__(self, paragraph, left, top, width, height, confidence, text):
         super().__init__(left, top, width, height)
         if text:
             raise Exception(f'Line should never be passed text directly: {text}')
