@@ -41,7 +41,7 @@ class Document:
                                 data['top'][i],
                                 data['width'][i],
                                 data['height'][i],
-                                data['confidence'][i],
+                                data['conf'][i],
                                 data['text'][i])
                     self.pages.append(page)
                 elif level == BLOCK:
@@ -50,7 +50,7 @@ class Document:
                                   data['top'][i],
                                   data['width'][i],
                                   data['height'][i],
-                                  data['confidence'][i],
+                                  data['conf'][i],
                                   data['text'][i])
                     page.blocks.append(block)
                 elif level == PARAGRAPH:
@@ -59,7 +59,7 @@ class Document:
                                           data['top'][i],
                                           data['width'][i],
                                           data['height'][i],
-                                          data['confidence'][i],
+                                          data['conf'][i],
                                           data['text'][i])
                     block.paragraphs.append(paragraph)
                 elif level == LINE:
@@ -68,7 +68,7 @@ class Document:
                                 data['top'][i],
                                 data['width'][i],
                                 data['height'][i],
-                                data['confidence'][i],
+                                data['conf'][i],
                                 data['text'][i])
                     paragraph.lines.append(line)
                 elif level == WORD:
@@ -77,7 +77,7 @@ class Document:
                                 data['top'][i],
                                 data['width'][i],
                                 data['height'][i],
-                                data['confidence'][i],
+                                data['conf'][i],
                                 data['text'][i])
                     line.append(word)
                 else:
