@@ -17,8 +17,10 @@ class Image():
                     print("Path is a dir")
                 else:
                     raise FileNotFoundError("Path is not a file or a dir")
+            elif type(arg) == PIL.Image.Image:
+                self.pil_image = arg
             else:
-                raise Exception("Image.__init__(arg): Argument was not a string")
+                raise Exception("Image.__init__(arg): Argument was not a path or PIL image")
         else:
             print("No argument passed")
 
@@ -30,16 +32,11 @@ class Image():
         return self.pil_image.__getattribute__(name)
 
     ###########################################################################
-    # Add a somewhat useful title to show() when none is provided
+    # Simple binary threshold
     ###########################################################################
 
-    def show(self, *args, **kwargs):
-        if len(args) == 0 and not 'title' in kwargs:
-            kwargs['title'] = os.path.basename(self.path)
-        self.pil_image.show(*args, **kwargs)
-
     def threshold(self, thresh=127):
-        return self.point(lambda p: 255 if p > thresh else 0)
+        return Image(self.point(lambda p: 255 if p > thresh else 0))
 
     ###########################################################################
     # Parse through all pixels to prepare for deeper comprehension
