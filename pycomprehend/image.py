@@ -37,3 +37,5 @@ class Image():
             kwargs['title'] = os.path.basename(self.path)
         self.pil_image.show(*args, **kwargs)
 
+    def threshold(self, thresh=127):
+        return self.point(lambda p: 255 if p > thresh else 0)
