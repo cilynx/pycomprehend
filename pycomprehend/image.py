@@ -67,6 +67,28 @@ class Image():
     @property
     def border_pixels(self):
         return [pixel for pixel in self.pixels if pixel.x == 0 or pixel.x == self.width or pixel.y == 0 or pixel.y == self.height]
+
+    ###########################################################################
+    # Oddly specific properties
+    ###########################################################################
+
+    @property
+    def border_is_white(self):
+        for pixel in self.border_pixels:
+            if pixel.value != (255, 255, 255):
+                return False
+        return True
+
+    ###########################################################################
+    # Crop to content
+    ###########################################################################
+
+    def autocrop(self):
+        if self.border_is_white:
+            return Image(self.crop(PIL.ImageOps.invert(self).getbbox()))
+        return Image(self.crop(self.getbbox()))
+
+
 class Pixel():
     def __init__(self, x, y, value):
         self.x = x
