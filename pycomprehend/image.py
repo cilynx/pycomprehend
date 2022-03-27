@@ -42,15 +42,13 @@ class Image():
     def threshold(self, thresh=127):
         return Image(self.point(lambda p: 255 if p > thresh else 0))
 
-
     ###########################################################################
     # Pixel collections
     ###########################################################################
 
     def pixels_by_value(self, value):
-        if not self.pixels:
-            self.parse_pixels()
-        return [pixel for pixel in self.pixels if pixel.value == value]
+        pixels = [pixel for row in self.pixels for pixel in row]
+        return [pixel for pixel in pixels if pixel.value == value]
 
     @property
     def black_pixels(self):
@@ -62,9 +60,8 @@ class Image():
 
     @property
     def border_pixels(self):
-        if not self.pixels:
-            self.parse_pixels()
-        return [pixel for pixel in self.pixels if pixel.x == 0 or pixel.x == self.width-1 or pixel.y == 0 or pixel.y == self.height-1]
+        pixels = [pixel for row in self.pixels for pixel in row]
+        return [pixel for pixel in pixels if pixel.x == 0 or pixel.x == self.width-1 or pixel.y == 0 or pixel.y == self.height-1]
 
     ###########################################################################
     # Oddly specific properties
