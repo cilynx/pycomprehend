@@ -78,14 +78,20 @@ class Image():
             if pixel.value != (255, 255, 255):
                 return False
         return True
+    ###########################################################################
+    # Get the bounding box regardless of if the background is black or white
+    ###########################################################################
+
+    def getbbox(self):
+        if self.border_is_white:
+            return PIL.ImageOps.invert(self).getbbox()
+        return self.pil_image.getbbox()
 
     ###########################################################################
     # Crop to content
     ###########################################################################
 
     def autocrop(self):
-        if self.border_is_white:
-            return Image(self.crop(PIL.ImageOps.invert(self).getbbox()))
         return Image(self.crop(self.getbbox()))
 
 
