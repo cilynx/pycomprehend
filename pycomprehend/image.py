@@ -66,7 +66,9 @@ class Image():
 
     @property
     def border_pixels(self):
-        return [pixel for pixel in self.pixels if pixel.x == 0 or pixel.x == self.width or pixel.y == 0 or pixel.y == self.height]
+        if not self.pixels:
+            self.parse_pixels()
+        return [pixel for pixel in self.pixels if pixel.x == 0 or pixel.x == self.width-1 or pixel.y == 0 or pixel.y == self.height-1]
 
     ###########################################################################
     # Oddly specific properties
@@ -74,10 +76,15 @@ class Image():
 
     @property
     def border_is_white(self):
+        white = 0
+        not_white = 0
         for pixel in self.border_pixels:
-            if pixel.value != (255, 255, 255):
-                return False
-        return True
+            if pixel.value == (255, 255, 255):
+                white += 1
+            else:
+                not_white += 1
+        return white/(white+not_white) >= 0.9
+
     ###########################################################################
     # Get the bounding box regardless of if the background is black or white
     ###########################################################################
