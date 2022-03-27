@@ -21,6 +21,10 @@ class Image():
                 self.pil_image = arg
             else:
                 raise Exception("Image.__init__(arg): Argument was not a path or PIL image")
+            for y in range(self.height):
+                self.pixels.append([])
+                for x in range(self.width):
+                    self.pixels[y].append(Pixel(x, y, self.getpixel((x,y))))
         else:
             print("No argument passed")
 
@@ -38,14 +42,6 @@ class Image():
     def threshold(self, thresh=127):
         return Image(self.point(lambda p: 255 if p > thresh else 0))
 
-    ###########################################################################
-    # Parse through all pixels to prepare for deeper comprehension
-    ###########################################################################
-
-    def parse_pixels(self):
-        for i in range(self.width):
-            for j in range(self.height):
-                self.pixels.append(Pixel(i, j, self.getpixel((i,j))))
 
     ###########################################################################
     # Pixel collections
