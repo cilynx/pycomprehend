@@ -115,6 +115,32 @@ class Image():
         return Image(self.crop(self.getbbox()))
 
     ###########################################################################
+    # Skew
+    ###########################################################################
+
+    def get_skew(self, min=-45, max=45, step=1):
+        guess = 0
+        dir = 1
+        prev_image = self.copy()
+        left, upper, right, lower = prev_image.getbbox()
+        prev_area = (lower-upper)*(right-left)
+        while min <= guess <= max:
+            guess += step*dir
+            image = self.rotate(guess)
+            left, upper, right, lower = image.getbbox()
+            area = (lower-upper)*(right-left)
+            if area > prev_area:
+                dir *= -1
+                step = step/2
+            elif area == prev_area:
+                return guess
+            prev_image = image
+            prev_area = area
+
+    def deskew(self, min=-45, max=45, step=1):
+        return Image(self.rotate(self.get_skew()))
+
+    ###########################################################################
     # Edges
     ###########################################################################
 
