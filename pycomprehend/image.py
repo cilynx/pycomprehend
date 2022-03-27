@@ -3,8 +3,9 @@ import os
 
 class Image():
     def __init__(self, arg=None):
+        self.pil_pixels = []
         self.pil_image = None
-        self.pixels = []
+        self.pixel = []
         self.path = None
 
         if arg:
@@ -22,9 +23,22 @@ class Image():
             else:
                 raise Exception("Image.__init__(arg): Argument was not a path or PIL image")
             for y in range(self.height):
-                self.pixels.append([])
+                self.pixel.append([])
                 for x in range(self.width):
-                    self.pixels[y].append(Pixel(x, y, self.getpixel((x,y))))
+                    pixel = Pixel(self, x, y)
+                    if y:
+                        pixel.neighbors['n'] = self.pixel[y-1][x]
+                        self.pixel[y-1][x].neighbors['s'] = pixel
+                        if x:
+                            pixel.neighbors['nw'] = self.pixel[y-1][x-1]
+                            self.pixel[y-1][x-1].neighbors['se'] = pixel
+                        if x < self.width - 1:
+                            pixel.neighbors['ne'] = self.pixel[y-1][x+1]
+                            self.pixel[y-1][x+1].neighbors['sw'] = pixel
+                    if x:
+                        pixel.neighbors['w'] = self.pixel[y][x-1]
+                        self.pixel[y][x-1].neighbors['e'] = pixel
+                    self.pixel[y].append(pixel)
         else:
             print("No argument passed")
 
@@ -46,9 +60,12 @@ class Image():
     # Pixel collections
     ###########################################################################
 
+    @property
+    def pixels(self):
+        return [pixel for row in self.pixel for pixel in row]
+
     def pixels_by_value(self, value):
-        pixels = [pixel for row in self.pixels for pixel in row]
-        return [pixel for pixel in pixels if pixel.value == value]
+        return [pixel for pixel in self.pixels if pixel.value == value]
 
     @property
     def black_pixels(self):
@@ -60,8 +77,11 @@ class Image():
 
     @property
     def border_pixels(self):
-        pixels = [pixel for row in self.pixels for pixel in row]
-        return [pixel for pixel in pixels if pixel.x == 0 or pixel.x == self.width-1 or pixel.y == 0 or pixel.y == self.height-1]
+        return [pixel for pixel in self.pixels if pixel.x == 0 or pixel.x == self.width-1 or pixel.y == 0 or pixel.y == self.height-1]
+
+    @property
+    def edge_pixels(self):
+        return [pixel for pixel in self.pixels if pixel.is_edge]
 
     ###########################################################################
     # Oddly specific properties
@@ -94,9 +114,37 @@ class Image():
     def autocrop(self):
         return Image(self.crop(self.getbbox()))
 
+    ###########################################################################
+    # Highlight and show edges
+    ###########################################################################
+
+    def highlight_edges(self, color=(255, 0, 0)):
+        copy = Image(self.copy())
+        for pixel in copy.edge_pixels:
+            pixel.value = (255, 0, 0)
+        return copy
+
+    def show_edges(self, color=None):
+        self.highlight_edges().show()
 
 class Pixel():
-    def __init__(self, x, y, value):
+    def __init__(self, image, x, y):
+        self.image = image
         self.x = x
         self.y = y
-        self.value = value
+        self.neighbors = {}
+
+    @property
+    def value(self):
+        return self.image.getpixel((self.x, self.y))
+
+    @value.setter
+    def value(self, value):
+        self.image.putpixel((self.x, self.y), value)
+
+    @property
+    def is_edge(self):
+        for neighbor in self.neighbors.values():
+            if neighbor.value != self.value:
+                return True
+        return False
