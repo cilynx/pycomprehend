@@ -115,17 +115,30 @@ class Image():
         return Image(self.crop(self.getbbox()))
 
     ###########################################################################
-    # Highlight and show edges
+    # Edges
     ###########################################################################
 
-    def highlight_edges(self, color=(255, 0, 0)):
+    def highlight_edges(self, color=None):
+        if not color:
+            color = (255, 0, 0)
         copy = Image(self.copy())
         for pixel in copy.edge_pixels:
-            pixel.value = (255, 0, 0)
+            pixel.value = color
         return copy
 
     def show_edges(self, color=None):
-        self.highlight_edges().show()
+        self.highlight_edges(color=color).show()
+
+    def edges(self):
+        image = PIL.Image.new('1', self.size)
+        data = []
+        for pixel in self.pixels:
+            if pixel.is_edge:
+                data.append(255)
+            else:
+                data.append(0)
+        image.putdata(data)
+        return Image(image)
 
 class Pixel():
     def __init__(self, image, x, y):
