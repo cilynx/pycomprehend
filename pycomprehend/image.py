@@ -3,6 +3,7 @@ import os
 
 from PIL import ImageFilter, ImageOps
 
+
 class Image():
     def __init__(self, arg=None):
         self.pil_pixels = []
@@ -106,7 +107,7 @@ class Image():
 
     def getbbox(self):
         if self.border_is_white:
-            return ImageOps.invert(self).getbbox()
+            return self.invert().getbbox()
         return self.pil_image.getbbox()
 
     ###########################################################################
@@ -159,8 +160,11 @@ class Image():
 
     def edges(self):
         if self.border_is_white:
-            return Image(ImageOps.invert(self).filter(ImageFilter.FIND_EDGES))
+            return Image(self.invert().filter(ImageFilter.FIND_EDGES))
         return Image(self.filter(ImageFilter.FIND_EDGES))
+
+    def invert(self):
+        return Image(ImageOps.invert(self))
 
 class Pixel():
     def __init__(self, image, x, y):
