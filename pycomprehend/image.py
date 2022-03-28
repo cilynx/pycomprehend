@@ -156,15 +156,9 @@ class Image():
         self.highlight_edges(color=color).show()
 
     def edges(self):
-        image = PIL.Image.new('1', self.size)
-        data = []
-        for pixel in self.pixels:
-            if pixel.is_edge:
-                data.append(255)
-            else:
-                data.append(0)
-        image.putdata(data)
-        return Image(image)
+        if self.border_is_white:
+            return Image(PIL.ImageOps.invert(self).filter(PIL.ImageFilter.FIND_EDGES))
+        return Image(self.filter(PIL.ImageFilter.FIND_EDGES))
 
 class Pixel():
     def __init__(self, image, x, y):
